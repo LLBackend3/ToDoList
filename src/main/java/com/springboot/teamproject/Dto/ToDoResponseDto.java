@@ -1,15 +1,20 @@
-package com.springboot.teamproject.dto;
+package com.springboot.teamproject.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class ToDoRequestDto {
+public class ToDoResponseDto {
+    private Long id;
     private String userName;
     private String title;
     private String description;
     private boolean completed;
+
+    public Long getId() {
+        return this.id;
+    }
 
     public String getUserName() {
         return this.userName;
@@ -25,6 +30,10 @@ public class ToDoRequestDto {
 
     public boolean isCompleted() {
         return this.completed;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setUserName(String userName) {
@@ -45,7 +54,8 @@ public class ToDoRequestDto {
 
     @Override
     public String toString() {
-        return "ToDoRequestDto(userName=" + this.getUserName() +
+        return "ToDoResponseDto(id=" + this.getId() +
+                ", userName=" + this.getUserName() +
                 ", title=" + this.getTitle() +
                 ", description=" + this.getDescription() +
                 ", completed=" + this.isCompleted() + ")";
