@@ -8,6 +8,9 @@ import com.springboot.teamproject.Service.ToDoListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 //import static jdk.javadoc.internal.doclets.formats.html.markup.HtmlStyle.title;
 
 @Service
@@ -67,7 +70,18 @@ public class ToDoListImpl implements ToDoListService {
         todoDAO.deleteToDo(id);
     }
 
-    public void getAllToDos() throws Exception{
-        todoDAO.getAllToDos();
+    @Override
+    public List<ToDoResponseDto> getAllToDos() throws Exception {
+        List<ToDo> toDos = todoDAO.getAllToDos();
+
+        return toDos.stream().map(todo -> {
+            ToDoResponseDto dto = new ToDoResponseDto();
+            dto.setId(todo.getId());
+            dto.setUserName(todo.getUserName());
+            dto.setTitle(todo.getTitle());
+            dto.setDescription(todo.getDescription());
+            dto.setCompleted(todo.isCompleted());
+            return dto;
+        }).collect(Collectors.toList());
     }
 }

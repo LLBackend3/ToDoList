@@ -1,16 +1,14 @@
 package com.springboot.teamproject.Controller;
 
-
 import com.springboot.teamproject.Dto.ToDoRequestDto;
 import com.springboot.teamproject.Dto.ToDoResponseDto;
-import com.springboot.teamproject.Entity.ToDo;
 import com.springboot.teamproject.Service.ToDoListService;
-import com.springboot.teamproject.Service.ToDoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/todos")
@@ -24,42 +22,32 @@ public class ToDoListController {
     }
 
     @PostMapping
-    public ToDoResponseDto createToDo(@RequestBody ToDoRequestDto requestDto) {
-        ToDo created = toDoListService.createToDo(requestDto);
-        return toResponseDto(created);
+    public ResponseEntity<ToDoResponseDto> createToDo(@RequestBody ToDoRequestDto requestDto) {
+        ToDoResponseDto responseDto = toDoListService.createToDo(requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @GetMapping("/{id}")
-    public ToDoResponseDto getToDoById(@PathVariable Long id) throws Exception {
-        ToDo todo = toDoListService.getToDoById(id);
-        return toResponseDto(todo);
+    public ResponseEntity<ToDoResponseDto> getToDoById(@PathVariable Long id) throws Exception {
+        ToDoResponseDto responseDto = toDoListService.getToDoById(id);
+        return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping
-    public List<ToDoResponseDto> getAllToDos() throws Exception {
-        List<ToDo> todos = toDoListService.getAllToDos();
-        return todos.stream().map(this::toResponseDto).collect(Collectors.toList());
+    public ResponseEntity<List<ToDoResponseDto>> getAllToDos() throws Exception {
+        List<ToDoResponseDto> allToDos = toDoListService.getAllToDos();
+        return ResponseEntity.ok(allToDos);
     }
 
     @PutMapping("/{id}")
-    public ToDoResponseDto updateToDo(@PathVariable Long id, @RequestBody ToDoRequestDto requestDto) throws Exception {
-        ToDo updated = toDoListService.updateToDo(id, requestDto);
-        return toResponseDto(updated);
+    public ResponseEntity<ToDoResponseDto> updateToDo(@PathVariable Long id, @RequestBody ToDoRequestDto requestDto) throws Exception {
+        ToDoResponseDto responseDto = toDoListService.updateToDo(id, requestDto);
+        return ResponseEntity.ok(responseDto);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteToDo(@PathVariable Long id) throws Exception {
+    public ResponseEntity<String> deleteToDo(@PathVariable Long id) throws Exception {
         toDoListService.deleteToDo(id);
-        return "삭제 완료 (id: " + id + ")";
-    }
-    
-    private ToDoResponseDto toResponseDto(ToDo todo) {
-        return new ToDoResponseDto(
-                todo.getId(),
-                todo.getUserName(),
-                todo.getTitle(),
-                todo.getDescription(),
-                todo.isCompleted()
-        );
+        return ResponseEntity.ok("삭제 완료 (id: " + id + ")");
     }
 }
