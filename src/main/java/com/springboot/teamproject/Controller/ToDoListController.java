@@ -51,8 +51,7 @@ public class ToDoListController {
         toDoService.deleteToDo(id);
         return "삭제 완료 (id: " + id + ")";
     }
-
-    // ✅ 변환 메서드
+    
     private ToDoResponseDto toResponseDto(ToDo todo) {
         return new ToDoResponseDto(
                 todo.getId(),
