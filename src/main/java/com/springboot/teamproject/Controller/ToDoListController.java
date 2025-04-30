@@ -4,6 +4,7 @@ package com.springboot.teamproject.Controller;
 import com.springboot.teamproject.Dto.ToDoRequestDto;
 import com.springboot.teamproject.Dto.ToDoResponseDto;
 import com.springboot.teamproject.Entity.ToDo;
+import com.springboot.teamproject.Service.ToDoListService;
 import com.springboot.teamproject.Service.ToDoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,40 +16,40 @@ import java.util.stream.Collectors;
 @RequestMapping("/todos")
 public class ToDoListController {
 
-    private final ToDoService toDoService;
+    private final ToDoListService toDoListService;
 
     @Autowired
-    public ToDoListController(ToDoService toDoService) {
-        this.toDoService = toDoService;
+    public ToDoListController(ToDoListService toDoListService) {
+        this.toDoListService = toDoListService;
     }
 
     @PostMapping
     public ToDoResponseDto createToDo(@RequestBody ToDoRequestDto requestDto) {
-        ToDo created = toDoService.createToDo(requestDto);
+        ToDo created = toDoListService.createToDo(requestDto);
         return toResponseDto(created);
     }
 
     @GetMapping("/{id}")
     public ToDoResponseDto getToDoById(@PathVariable Long id) throws Exception {
-        ToDo todo = toDoService.getToDoById(id);
+        ToDo todo = toDoListService.getToDoById(id);
         return toResponseDto(todo);
     }
 
     @GetMapping
     public List<ToDoResponseDto> getAllToDos() throws Exception {
-        List<ToDo> todos = toDoService.getAllToDos();
+        List<ToDo> todos = toDoListService.getAllToDos();
         return todos.stream().map(this::toResponseDto).collect(Collectors.toList());
     }
 
     @PutMapping("/{id}")
     public ToDoResponseDto updateToDo(@PathVariable Long id, @RequestBody ToDoRequestDto requestDto) throws Exception {
-        ToDo updated = toDoService.updateToDo(id, requestDto);
+        ToDo updated = toDoListService.updateToDo(id, requestDto);
         return toResponseDto(updated);
     }
 
     @DeleteMapping("/{id}")
     public String deleteToDo(@PathVariable Long id) throws Exception {
-        toDoService.deleteToDo(id);
+        toDoListService.deleteToDo(id);
         return "삭제 완료 (id: " + id + ")";
     }
     
